@@ -1,0 +1,29 @@
+material speedlimitlift/Diffuse
+{
+  receive_shadows off
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture speedlimitlift.jpeg
+      }
+    }
+  }
+}
+
+material StopSign/Specular
+{
+  receive_shadows off
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture speedlimitlift.jpeg
+      }
+    }
+  }
+}

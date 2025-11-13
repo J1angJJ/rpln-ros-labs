@@ -1,0 +1,30 @@
+{
+	"name": "ROS Container with VS-Code",
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+	"service": "workspace",
+	"shutdownAction": "stopCompose",
+	"workspaceFolder": "/home/developer/workspace",
+	// "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.cpptools",
+				"ms-python.python",
+				"ajshort.msg",
+				"twxs.cmake",
+				"redhat.vscode-xml",
+				"actboy168.tasks",
+				"brpaz.file-templates",
+				"ms-iot.vscode-ros"
+			]
+		}
+	},
+	"runArgs": [
+	],
+	"mounts": [
+		"source=${localWorkspaceFolder}/src,target=/workspace/src,type=bind,consistency=cached"
+	],
+    //"appPort": [80],
+}

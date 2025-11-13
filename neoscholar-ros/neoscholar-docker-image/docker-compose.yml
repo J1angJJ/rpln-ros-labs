@@ -1,0 +1,51 @@
+version: '2.3'
+services:
+  xserver:
+    image: devrt/xserver
+    ipc: host
+    security_opt:
+    - seccomp:unconfined
+    ports:
+    - "3000:80"
+    healthcheck:
+      test: ["CMD-SHELL", "test -e /tmp/.X11-unix/X0"]
+      interval: "1s"
+      retries: 20
+  simulator:
+    image: devrt/simulator-robot
+    ipc: host
+    security_opt:
+    - seccomp:unconfined
+    environment:
+    - DISPLAY=:0
+    - GAZEBO_MODEL_PATH=/home/developer/models:$GAZEBO_MODEL_PATH  # Add models to Gazebo path
+    volumes_from:
+    - xserver
+    volumes:
+      - ./ros/models:/home/developer/models:rw  # Mount local models folder to simulator
+      - ./ros/worlds/turtlebot3_autorace.world:/opt/ros/melodic/share/turtlebot3_gazebo/worlds/turtlebot3_autorace.world:ro  # Replace the world file
+    depends_on:
+    - xserver
+  workspace:
+    # env_file:
+    #   - .env
+    image: devrt/ros-devcontainer-vscode:noetic-desktop
+    ipc: host
+    security_opt:
+    - seccomp:unconfined
+    ports:
+    - "3001:3000"
+    - "3002:8888"
+    volumes:
+    - workspace:/workspace
+    - ./src:/workspace/src:rw  # Mount local src to /workspace in container
+    environment:
+    - DISPLAY=:0
+    - ROS_MASTER_URI=http://simulator:11311/
+    volumes_from:
+    - xserver
+    - simulator
+    depends_on:
+    - xserver
+volumes:
+  workspace:
